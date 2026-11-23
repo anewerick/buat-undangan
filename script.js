@@ -114,7 +114,7 @@ const editorFields = {
 editorFields.groom.value = config.names.groom;
 editorFields.bride.value = config.names.bride;
 Object.entries(editorFields).forEach(([key, field]) => {
-  if (key !== "groom" && key !== "bride" && field.value === "") field.value = config[key] || "";
+  if (key !== "groom" && key !== "bride" && key !== "dateISO" && field.value === "") field.value = config[key] || "";
 });
 
 function isoToLocalInput(value) {
