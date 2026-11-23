@@ -1,0 +1,20 @@
+window.WEDDING_CONFIG = {
+  names: { groom: "Arga", bride: "Rania", groomFull: "Arga Wijaya", brideFull: "Rania Putri" },
+  dateText: "Sabtu, 20 Juni 2027",
+  dateShort: "20 · 06 · 2027",
+  dateISO: "2027-06-20T08:00:00+07:00",
+  rsvpDeadline: "10 Juni 2027",
+  groomParents: "Putra pertama dari<br>Bapak Hadi Wijaya & Ibu Maya Sari",
+  brideParents: "Putri kedua dari<br>Bapak Dimas Pratama & Ibu Lina Kartika",
+  instagramGroom: "@argawijaya",
+  instagramBride: "@raniaputri",
+  instagramGroomUrl: "https://instagram.com",
+  instagramBrideUrl: "https://instagram.com",
+  venue: "The Glass House",
+  address: "Jl. Melati Raya No. 88, Jakarta Selatan",
+  mapUrl: "https://maps.google.com",
+  heroImage: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1920&q=88",
+  groomImage: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=700&q=88",
+  brideImage: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=700&q=88",
+  eventImage: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1600&q=85"
+};
