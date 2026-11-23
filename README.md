@@ -1,5 +1,7 @@
 # TemuUndang — Platform Undangan Digital
 
+Di menu **Editor Undangan**, pengguna dapat mengunggah atau memasukkan URL untuk foto pengantin pria, foto pengantin wanita, dan background undangan. Ukuran unggahan dibatasi 3 MB agar aman tersimpan pada browser.
+
 Halaman utama berfungsi sebagai landing page dan katalog tema. Tombol **Dashboard** membuka area pengelolaan undangan, editor data, pratinjau template, serta daftar tamu dan tautan personal.
 
 Undangan lengkap tersedia pada `invitation.html` dan dapat dibagikan dengan parameter tamu, misalnya:

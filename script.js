@@ -7,7 +7,10 @@ if (project) {
   config.dateText = project.date;
   config.address = project.address;
   config.venue = project.venue;
-  if (project.photo) config.heroImage = project.photo;
+  if (project.groomPhoto) config.groomImage = project.groomPhoto;
+  if (project.bridePhoto) config.brideImage = project.bridePhoto;
+  if (project.background) config.heroImage = project.background;
+  else if (project.photo) config.heroImage = project.photo;
 }
 
 function applyConfig() {
