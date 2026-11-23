@@ -1,6 +1,14 @@
 const defaultConfig = window.WEDDING_CONFIG || {};
 const savedConfig = JSON.parse(localStorage.getItem("weddingConfig") || "null");
+const project = JSON.parse(localStorage.getItem("temuundang-project") || "null");
 const config = { ...defaultConfig, ...(savedConfig || {}) };
+if (project) {
+  config.names = { ...config.names, groom: project.groom, bride: project.bride, groomFull: project.groom, brideFull: project.bride };
+  config.dateText = project.date;
+  config.address = project.address;
+  config.venue = project.venue;
+  if (project.photo) config.heroImage = project.photo;
+}
 
 function applyConfig() {
   document.querySelectorAll("[data-config]").forEach((element) => {
@@ -61,8 +69,30 @@ document.querySelectorAll(".reveal").forEach((element) => observer.observe(eleme
 
 const form = document.getElementById("rsvp-form");
 const toast = document.getElementById("toast");
+const guestParam = new URLSearchParams(location.search).get("to");
+if (guestParam) {
+  const nameField = form.querySelector('[name="name"]');
+  if (nameField) nameField.value = guestParam;
+}
 form.addEventListener("submit", (event) => {
   event.preventDefault();
+  const data = new FormData(form);
+  const rsvp = {
+    name: data.get("name"),
+    attendance: data.get("attendance"),
+    guests: data.get("guests"),
+    message: data.get("message"),
+    submittedAt: new Date().toISOString()
+  };
+  const responses = JSON.parse(localStorage.getItem("temuundang-rsvp") || "[]");
+  responses.push(rsvp);
+  localStorage.setItem("temuundang-rsvp", JSON.stringify(responses));
+  const guests = JSON.parse(localStorage.getItem("temuundang-guests") || "[]");
+  const matchingGuest = guests.find((guest) => guest.name.toLowerCase() === rsvp.name.toLowerCase());
+  if (matchingGuest) {
+    matchingGuest.status = rsvp.attendance;
+    localStorage.setItem("temuundang-guests", JSON.stringify(guests));
+  }
   toast.classList.add("show");
   form.reset();
   setTimeout(() => toast.classList.remove("show"), 3200);

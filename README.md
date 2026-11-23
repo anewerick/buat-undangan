@@ -1,3 +1,11 @@
+# TemuUndang — Platform Undangan Digital
+
+Halaman utama berfungsi sebagai landing page dan katalog tema. Tombol **Dashboard** membuka area pengelolaan undangan, editor data, pratinjau template, serta daftar tamu dan tautan personal.
+
+Undangan lengkap tersedia pada `invitation.html` dan dapat dibagikan dengan parameter tamu, misalnya:
+
+`invitation.html?to=Budi%20Santoso`
+
 # Undangan Pernikahan
 
 ## Edit undangan
