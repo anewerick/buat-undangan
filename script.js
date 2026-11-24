@@ -135,62 +135,6 @@ function stopMusic() {
   }
 }
 
-const editorPanel = document.getElementById("editor-panel");
-const editorFields = {
-  groom: document.getElementById("edit-groom"), bride: document.getElementById("edit-bride"),
-  dateText: document.getElementById("edit-dateText"), dateISO: document.getElementById("edit-dateISO"),
-  venue: document.getElementById("edit-venue"), address: document.getElementById("edit-address"),
-  mapUrl: document.getElementById("edit-mapUrl"), rsvpDeadline: document.getElementById("edit-rsvpDeadline"),
-  heroImage: document.getElementById("edit-heroImage")
-};
-
-editorFields.groom.value = config.names.groom;
-editorFields.bride.value = config.names.bride;
-Object.entries(editorFields).forEach(([key, field]) => {
-  if (key !== "groom" && key !== "bride" && key !== "dateISO" && field.value === "") field.value = config[key] || "";
-});
-
-function isoToLocalInput(value) {
-  if (!value) return "";
-  const date = new Date(value);
-  const offset = date.getTimezoneOffset() * 60000;
-  return new Date(date.getTime() - offset).toISOString().slice(0, 16);
-}
-if (config.dateISO) editorFields.dateISO.value = isoToLocalInput(config.dateISO);
-
-document.getElementById("edit-toggle").addEventListener("click", () => editorPanel.classList.toggle("open"));
-document.getElementById("editor-close").addEventListener("click", () => editorPanel.classList.remove("open"));
-
-document.getElementById("editor-save").addEventListener("click", () => {
-  const next = structuredClone(config);
-  next.names.groom = editorFields.groom.value.trim() || next.names.groom;
-  next.names.bride = editorFields.bride.value.trim() || next.names.bride;
-  next.names.groomFull = next.names.groom;
-  next.names.brideFull = next.names.bride;
-  ["dateText", "dateISO", "venue", "address", "mapUrl", "rsvpDeadline", "heroImage"].forEach((key) => {
-    if (editorFields[key].value.trim()) next[key] = editorFields[key].value.trim();
-  });
-  if (editorFields.dateISO.value) next.dateISO = new Date(editorFields.dateISO.value).toISOString();
-  localStorage.setItem("weddingConfig", JSON.stringify(next));
-  location.reload();
-});
-
-document.getElementById("editor-export").addEventListener("click", () => {
-  const next = { ...config };
-  next.names.groom = editorFields.groom.value.trim() || next.names.groom;
-  next.names.bride = editorFields.bride.value.trim() || next.names.bride;
-  ["dateText", "dateISO", "venue", "address", "mapUrl", "rsvpDeadline", "heroImage"].forEach((key) => {
-    if (editorFields[key].value.trim()) next[key] = editorFields[key].value.trim();
-  });
-  const blob = new Blob([`window.WEDDING_CONFIG = ${JSON.stringify(next, null, 2)};\n`], { type: "application/javascript" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "config.js";
-  link.click();
-  URL.revokeObjectURL(url);
-});
-
 musicButton.addEventListener("click", () => {
   const playing = musicButton.getAttribute("aria-pressed") === "true";
   if (playing) {

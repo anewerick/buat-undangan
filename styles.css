@@ -176,18 +176,6 @@ footer p { margin: 0 0 12px; font-size: 9px; letter-spacing: 5px; }
 footer h2 { margin: 0; font-family: "Great Vibes", cursive; font-size: 54px; font-weight: 400; }
 footer span { display: block; margin-top: 12px; font-size: 10px; letter-spacing: 4px; }
 
-.edit-toggle { position: fixed; right: 78px; bottom: 20px; z-index: 31; height: 48px; border: 0; border-radius: 24px; padding: 0 16px; background: white; color: var(--ink); box-shadow: 0 5px 24px rgba(0,0,0,.16); font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; }
-.editor-panel { position: fixed; right: 18px; bottom: 78px; z-index: 32; width: min(360px, calc(100% - 36px)); max-height: calc(100vh - 100px); overflow: auto; background: white; box-shadow: 0 12px 50px rgba(38,43,36,.22); transform: translateY(20px); opacity: 0; pointer-events: none; transition: .25s ease; }
-.editor-panel.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
-.editor-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid #eee; }
-.editor-head strong { font-family: "Cormorant Garamond", serif; font-size: 20px; }
-.editor-head button { border: 0; background: none; font-size: 24px; cursor: pointer; }
-.editor-body { display: grid; gap: 12px; padding: 16px; }
-.editor-body label { display: grid; gap: 6px; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
-.editor-body input { padding: 10px 12px; }
-.editor-save, .editor-export { width: 100%; }
-.editor-export { background: transparent; border: 1px solid var(--sage); color: var(--sage-dark); }
-
 .music-control { position: fixed; right: 20px; bottom: 20px; z-index: 30; width: 48px; height: 48px; border: 1px solid rgba(255,255,255,.5); border-radius: 50%; background: rgba(49,56,47,.78); backdrop-filter: blur(8px); cursor: pointer; display: grid; place-items: center; }
 .music-icon { width: 20px; fill: none; stroke: white; stroke-width: 1.5; }
 .music-control.playing { animation: pulse 2s infinite; }
