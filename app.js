@@ -16,14 +16,25 @@ function renderEditor(){
 
   function readImage(fieldId, callback){
     const input=document.getElementById(fieldId);
-    input.onchange=()=>{const file=input.files&&input.files[0];if(!file)return;if(file.size>3*1024*1024){showToast('Ukuran foto maksimal 3 MB');input.value='';return}const reader=new FileReader();reader.onload=()=>callback(reader.result);reader.readAsDataURL(file)};
+    input.onchange=()=>{const file=input.files&&input.files[0];if(!file)return;if(file.size>3*1024*1024){showToast('Ukuran tiap foto maksimal 3 MB');input.value='';return}const reader=new FileReader();reader.onload=()=>callback(reader.result);reader.readAsDataURL(file)};
   }
   readImage('groomPhotoFile',value=>document.getElementById('groomPhotoUrl').value=value);
   readImage('bridePhotoFile',value=>document.getElementById('bridePhotoUrl').value=value);
   readImage('backgroundFile',value=>document.getElementById('backgroundUrl').value=value);
 
   document.getElementById('save-project').onclick=()=>{
-    const project={groom:groom.value,bride:bride.value,date:date.value,venue:venue.value,address:address.value,photo:backgroundUrl.value,groomPhoto:groomPhotoUrl.value,bridePhoto:bridePhotoUrl.value,background:backgroundUrl.value,opening:opening.value};
+    const project={
+      groom:document.getElementById('groom').value,
+      bride:document.getElementById('bride').value,
+      date:document.getElementById('date').value,
+      venue:document.getElementById('venue').value,
+      address:document.getElementById('address').value,
+      photo:document.getElementById('backgroundUrl').value,
+      groomPhoto:document.getElementById('groomPhotoUrl').value,
+      bridePhoto:document.getElementById('bridePhotoUrl').value,
+      background:document.getElementById('backgroundUrl').value,
+      opening:document.getElementById('opening').value
+    };
     try{localStorage.setItem('temuundang-project',JSON.stringify(project));document.getElementById('preview').src='invitation.html?preview='+Date.now();showToast('Foto dan perubahan berhasil disimpan')}catch(e){showToast('Gagal menyimpan: gambar terlalu besar')}
   }
 }
