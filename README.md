@@ -2,7 +2,7 @@
 
 Di menu **Editor Undangan**, pengguna dapat mengunggah atau memasukkan URL untuk foto pengantin pria, foto pengantin wanita, dan background undangan. Ukuran unggahan dibatasi 3 MB agar aman tersimpan pada browser.
 
-Halaman utama berfungsi sebagai landing page dan katalog tema. Tombol **Dashboard** membuka area pengelolaan undangan, editor data, pratinjau template, serta daftar tamu dan tautan personal.
+Halaman utama berfungsi sebagai landing page dan katalog tema. Tombol **Dashboard Undangan** membuka area pengelolaan undangan, editor data, pratinjau template, serta daftar tamu dan tautan personal. Semua enam tema dapat dipilih dari katalog atau dropdown di editor; pilihan ikut tersimpan di pratinjau dan tautan undangan.
 
 Undangan yang dibuka atau disalin dari dashboard memakai slug nama pasangan dan membawa nama mempelai di tautan, misalnya:
 

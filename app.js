@@ -1,9 +1,9 @@
 const marketing=document.getElementById('marketing'),dashboard=document.getElementById('dashboard'),workspace=document.getElementById('workspace'),toast=document.getElementById('toast-app');
 function showToast(text){toast.textContent=text;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2200)}
-function openDashboard(view='projects'){marketing.style.display='none';dashboard.classList.add('active');renderView(view)}
+function openDashboard(view='projects'){marketing.style.display='none';dashboard.classList.add('active');document.title='Dashboard Undangan | TemuUndang';renderView(view)}
 document.getElementById('open-dashboard').onclick=()=>openDashboard();document.getElementById('create-project').onclick=()=>openDashboard('editor');
-document.getElementById('dashboard-close').onclick=()=>{dashboard.classList.remove('active');marketing.style.display='block'};document.getElementById('back-home').onclick=(e)=>{e.preventDefault();dashboard.classList.remove('active');marketing.style.display='block'};
-document.querySelectorAll('.theme-card').forEach(card=>card.onclick=()=>openDashboard('editor'));
+document.getElementById('dashboard-close').onclick=()=>{dashboard.classList.remove('active');marketing.style.display='block';document.title='TemuUndang — Undangan Digital'};document.getElementById('back-home').onclick=(e)=>{e.preventDefault();dashboard.classList.remove('active');marketing.style.display='block';document.title='TemuUndang — Undangan Digital'};
+document.querySelectorAll('.theme-card').forEach(card=>{const choose=()=>{const project=getSavedProject();project.theme=card.dataset.theme;localStorage.setItem('temuundang-project',JSON.stringify(project));openDashboard('editor');showToast('Tema '+getThemeName(project.theme)+' dipilih')};card.onclick=choose;card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose()}}});
 document.querySelectorAll('.sidebar button').forEach(button=>button.onclick=()=>{document.querySelectorAll('.sidebar button').forEach(b=>b.classList.remove('active'));button.classList.add('active');renderView(button.dataset.view)});
 function getInvitationUrl(project,guestName){
   const slugify=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
@@ -12,15 +12,20 @@ function getInvitationUrl(project,guestName){
   url.searchParams.set('couple',slug);
   if(project.groom)url.searchParams.set('groom',project.groom);
   if(project.bride)url.searchParams.set('bride',project.bride);
+  if(project.theme)url.searchParams.set('theme',project.theme);
   if(guestName)url.searchParams.set('to',guestName);
   return url.href;
 }
+const themes={'elegant-sage':'Elegant Sage','garden-romance':'Garden Romance','classic-ivory':'Classic Ivory','forest-gold':'Forest & Gold','modern-bloom':'Modern Bloom','soft-minimal':'Soft Minimal'};
+function getThemeName(theme){return themes[theme]||themes['elegant-sage']}
 function getSavedProject(){return JSON.parse(localStorage.getItem('temuundang-project')||'null')||{groom:'Arga',bride:'Rania'}}
 function updateOpenWebsiteLink(){document.getElementById('open-public-invitation').href=getInvitationUrl(getSavedProject())}
-function renderProjects(){const project=getSavedProject(),invitationUrl=getInvitationUrl(project);workspace.innerHTML=`<div class="workspace-head"><h1>Proyek Saya</h1><button class="btn" id="new-project">+ Undangan Baru</button></div><div class="project-grid"><article class="project-card"><div class="project-cover"></div><div class="project-info"><h3>${escapeHtml(project.groom||'Mempelai Pria')} & ${escapeHtml(project.bride||'Mempelai Wanita')}</h3><p>Elegant Sage · Diperbarui hari ini</p><div class="project-actions"><a href="${escapeHtml(invitationUrl)}" target="_blank" rel="noopener">Buka</a><button class="edit-project">Edit</button><button class="copy-link">Salin Tautan</button></div></div></article></div>`;document.getElementById('new-project').onclick=()=>renderView('editor');workspace.querySelector('.edit-project').onclick=()=>renderView('editor');workspace.querySelector('.copy-link').onclick=async()=>{try{await navigator.clipboard.writeText(invitationUrl);showToast('Tautan '+project.groom+' & '+project.bride+' disalin')}catch(e){showToast('Tidak dapat menyalin tautan. Silakan buka tautan undangan langsung.')}}}
+function renderProjects(){const project=getSavedProject(),invitationUrl=getInvitationUrl(project);workspace.innerHTML=`<div class="workspace-head"><h1>Proyek Saya</h1><button class="btn" id="new-project">+ Undangan Baru</button></div><div class="project-grid"><article class="project-card"><div class="project-cover"></div><div class="project-info"><h3>${escapeHtml(project.groom||'Mempelai Pria')} & ${escapeHtml(project.bride||'Mempelai Wanita')}</h3><p>${getThemeName(project.theme)} · Diperbarui hari ini</p><div class="project-actions"><a href="${escapeHtml(invitationUrl)}" target="_blank" rel="noopener">Buka</a><button class="edit-project">Edit</button><button class="copy-link">Salin Tautan</button></div></div></article></div>`;document.getElementById('new-project').onclick=()=>renderView('editor');workspace.querySelector('.edit-project').onclick=()=>renderView('editor');workspace.querySelector('.copy-link').onclick=async()=>{try{await navigator.clipboard.writeText(invitationUrl);showToast('Tautan '+project.groom+' & '+project.bride+' disalin')}catch(e){showToast('Tidak dapat menyalin tautan. Silakan buka tautan undangan langsung.')}}}
 function renderEditor(){
   const saved=JSON.parse(localStorage.getItem('temuundang-project')||'null')||{};
-  workspace.innerHTML=`<div class="workspace-head"><h1>Editor Undangan</h1><button class="btn" id="save-project">Simpan Perubahan</button></div><div class="editor-grid"><div class="form-card"><label>Nama mempelai pria<input id="groom" value="${escapeHtml(saved.groom||'Arga')}"></label><label>Nama mempelai wanita<input id="bride" value="${escapeHtml(saved.bride||'Rania')}"></label><label>Tanggal acara<input id="date" value="${escapeHtml(saved.date||'20 Juni 2027')}"></label><label>Lokasi acara<input id="venue" value="${escapeHtml(saved.venue||'The Glass House')}"></label><label>Alamat<input id="address" value="${escapeHtml(saved.address||'Jl. Melati Raya No. 88, Jakarta Selatan')}"></label>
+  const selectedTheme=saved.theme||'elegant-sage';
+  const themeOptions=Object.entries(themes).map(([id,name])=>`<option value="${id}" ${selectedTheme===id?'selected':''}>${name}</option>`).join('');
+  workspace.innerHTML=`<div class="workspace-head"><h1>Editor Undangan</h1><button class="btn" id="save-project">Simpan Perubahan</button></div><div class="editor-grid"><div class="form-card"><label>Nama mempelai pria<input id="groom" value="${escapeHtml(saved.groom||'Arga')}"></label><label>Nama mempelai wanita<input id="bride" value="${escapeHtml(saved.bride||'Rania')}"></label><label>Tema undangan<select id="theme">${themeOptions}</select></label><label>Tanggal acara<input id="date" value="${escapeHtml(saved.date||'20 Juni 2027')}"></label><label>Lokasi acara<input id="venue" value="${escapeHtml(saved.venue||'The Glass House')}"></label><label>Alamat<input id="address" value="${escapeHtml(saved.address||'Jl. Melati Raya No. 88, Jakarta Selatan')}"></label>
   <label>Foto pengantin pria<input id="groomPhotoUrl" type="url" placeholder="URL foto atau gunakan unggah" value="${escapeHtml(saved.groomPhoto||'')}"></label><label>Unggah foto pria<input id="groomPhotoFile" type="file" accept="image/*"></label>
   <label>Foto pengantin wanita<input id="bridePhotoUrl" type="url" placeholder="URL foto atau gunakan unggah" value="${escapeHtml(saved.bridePhoto||'')}"></label><label>Unggah foto wanita<input id="bridePhotoFile" type="file" accept="image/*"></label>
   <label>Background undangan<input id="backgroundUrl" type="url" placeholder="URL gambar background" value="${escapeHtml(saved.background||saved.photo||'')}"></label><label>Unggah background<input id="backgroundFile" type="file" accept="image/*"></label>
@@ -38,6 +43,7 @@ function renderEditor(){
     const project={
       groom:document.getElementById('groom').value,
       bride:document.getElementById('bride').value,
+      theme:document.getElementById('theme').value,
       date:document.getElementById('date').value,
       venue:document.getElementById('venue').value,
       address:document.getElementById('address').value,

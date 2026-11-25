@@ -7,6 +7,7 @@ if (project) {
   config.dateText = project.date;
   config.address = project.address;
   config.venue = project.venue;
+  config.theme = project.theme || config.theme;
   if (project.groomPhoto) config.groomImage = project.groomPhoto;
   if (project.bridePhoto) config.brideImage = project.bridePhoto;
   if (project.background) config.heroImage = project.background;
@@ -15,6 +16,8 @@ if (project) {
 const invitationParams = new URLSearchParams(location.search);
 const linkedGroom = invitationParams.get("groom");
 const linkedBride = invitationParams.get("bride");
+const linkedTheme = invitationParams.get("theme");
+if (linkedTheme) config.theme = linkedTheme;
 if (linkedGroom || linkedBride) {
   config.names = {
     ...config.names,
@@ -26,6 +29,7 @@ if (linkedGroom || linkedBride) {
 }
 
 function applyConfig() {
+  document.body.dataset.theme = config.theme || "elegant-sage";
   document.querySelectorAll("[data-config]").forEach((element) => {
     const key = element.dataset.config;
     const value = key === "groom" ? config.names.groom
@@ -47,7 +51,7 @@ function applyConfig() {
   if (config.heroImage) document.querySelector(".hero-photo").style.backgroundImage = `linear-gradient(110deg, rgba(33,38,31,.12), transparent 55%), url("${config.heroImage}")`;
   if (config.groomImage) document.querySelector(".portrait-arga").style.backgroundImage = `url("${config.groomImage}")`;
   if (config.brideImage) document.querySelector(".portrait-rania").style.backgroundImage = `url("${config.brideImage}")`;
-  if (config.eventImage) document.querySelector(".event-bg").style.backgroundImage = `linear-gradient(rgba(48,57,46,.78), rgba(48,57,46,.88)), url("${config.eventImage}")`;
+  if (config.eventImage) document.querySelector(".event-bg").style.backgroundImage = `linear-gradient(var(--event-overlay-start, rgba(48,57,46,.78)), var(--event-overlay-end, rgba(48,57,46,.88))), url("${config.eventImage}")`;
 }
 applyConfig();
 

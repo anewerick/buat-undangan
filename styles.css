@@ -224,3 +224,32 @@ footer span { display: block; margin-top: 12px; font-size: 10px; letter-spacing:
   .hero-photo { animation: none; }
   .reveal { transition: none; }
 }
+
+body[data-theme="garden-romance"] {
+  --ivory: #faf4f1; --cream: #f2e7e2; --sage: #ad777b; --sage-dark: #754e53;
+  --ink: #3d3332; --gold: #c89e75; --event-overlay-start: rgba(76, 48, 52, .78);
+  --event-overlay-end: rgba(76, 48, 52, .88);
+}
+body[data-theme="classic-ivory"] {
+  --ivory: #fbf8f2; --cream: #efe8da; --sage: #89795f; --sage-dark: #574b3b;
+  --ink: #302c27; --gold: #b69a69; --event-overlay-start: rgba(53, 46, 37, .78);
+  --event-overlay-end: rgba(53, 46, 37, .88);
+}
+body[data-theme="forest-gold"] {
+  --ivory: #f0f0e9; --cream: #dfe2d5; --sage: #687454; --sage-dark: #3e4b35;
+  --ink: #272d26; --gold: #bd9d53; --event-overlay-start: rgba(35, 44, 32, .78);
+  --event-overlay-end: rgba(35, 44, 32, .9);
+}
+body[data-theme="modern-bloom"] {
+  --ivory: #fff4f1; --cream: #f8e0dc; --sage: #c57d73; --sage-dark: #8b514b;
+  --ink: #3d2e2c; --gold: #d9a77e; --event-overlay-start: rgba(77, 46, 44, .76);
+  --event-overlay-end: rgba(77, 46, 44, .88);
+}
+body[data-theme="soft-minimal"] {
+  --ivory: #f8f8f6; --cream: #ecece8; --sage: #7f8680; --sage-dark: #505652;
+  --ink: #292d2a; --gold: #aaa994; --event-overlay-start: rgba(39, 45, 42, .78);
+  --event-overlay-end: rgba(39, 45, 42, .88);
+}
+body[data-theme]:not([data-theme="elegant-sage"]) .couple-section,
+body[data-theme]:not([data-theme="elegant-sage"]) .gallery { background: var(--cream); }
+body[data-theme]:not([data-theme="elegant-sage"]) footer { background: var(--sage-dark); }
