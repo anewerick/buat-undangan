@@ -8,7 +8,8 @@ document.querySelectorAll('.sidebar button').forEach(button=>button.onclick=()=>
 function getInvitationUrl(project,guestName){
   const slugify=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
   const slug=[slugify(project.groom),slugify(project.bride)].filter(Boolean).join('-')||'undangan';
-  const url=new URL('invitation.html',location.href);
+  const baseUrl=location.hostname==='anewerick.github.io'?'https://anewerick.github.io/buat-undangan/':new URL('./',location.href).href;
+  const url=new URL('invitation.html',baseUrl);
   url.searchParams.set('couple',slug);
   if(project.groom)url.searchParams.set('groom',project.groom);
   if(project.bride)url.searchParams.set('bride',project.bride);
@@ -25,11 +26,12 @@ function renderEditor(){
   const saved=JSON.parse(localStorage.getItem('temuundang-project')||'null')||{};
   const selectedTheme=saved.theme||'elegant-sage';
   const themeOptions=Object.entries(themes).map(([id,name])=>`<option value="${id}" ${selectedTheme===id?'selected':''}>${name}</option>`).join('');
+  const previewUrl=getInvitationUrl({...getSavedProject(),...saved,theme:selectedTheme});
   workspace.innerHTML=`<div class="workspace-head"><h1>Editor Undangan</h1><button class="btn" id="save-project">Simpan Perubahan</button></div><div class="editor-grid"><div class="form-card"><label>Nama mempelai pria<input id="groom" value="${escapeHtml(saved.groom||'Arga')}"></label><label>Nama mempelai wanita<input id="bride" value="${escapeHtml(saved.bride||'Rania')}"></label><label>Tema undangan<select id="theme">${themeOptions}</select></label><label>Tanggal acara<input id="date" value="${escapeHtml(saved.date||'20 Juni 2027')}"></label><label>Lokasi acara<input id="venue" value="${escapeHtml(saved.venue||'The Glass House')}"></label><label>Alamat<input id="address" value="${escapeHtml(saved.address||'Jl. Melati Raya No. 88, Jakarta Selatan')}"></label>
   <label>Foto pengantin pria<input id="groomPhotoUrl" type="url" placeholder="URL foto atau gunakan unggah" value="${escapeHtml(saved.groomPhoto||'')}"></label><label>Unggah foto pria<input id="groomPhotoFile" type="file" accept="image/*"></label>
-  <label>Foto pengantin wanita<input id="bridePhotoUrl" type="url" placeholder="URL foto atau gunakan unggah" value="${escapeHtml(saved.bridePhoto||'')}"></label><label>Unggah foto wanita<input id="bridePhotoFile" type="file" accept="image/*"></label>
+  <label>Foto pengantin wanita<input id="bridePhotoUrl" type="url" placeholder="URL foto atau gunakan unggah" value="${escapeHtml(saved.bridePhoto||'')}"></label>  <label>Unggah foto wanita<input id="bridePhotoFile" type="file" accept="image/*"></label>
   <label>Background undangan<input id="backgroundUrl" type="url" placeholder="URL gambar background" value="${escapeHtml(saved.background||saved.photo||'')}"></label><label>Unggah background<input id="backgroundFile" type="file" accept="image/*"></label>
-  <label>Ucapan pembuka<textarea id="opening" rows="3">${escapeHtml(saved.opening||'Dengan penuh sukacita, kami mengundang Anda untuk merayakan hari bahagia kami.')}</textarea></label></div><div class="preview-card"><iframe class="preview-frame" id="preview" src="invitation.html"></iframe></div></div>`;
+  <label>Ucapan pembuka<textarea id="opening" rows="3">${escapeHtml(saved.opening||'Dengan penuh sukacita, kami mengundang Anda untuk merayakan hari bahagia kami.')}</textarea></label></div><div class="preview-card"><iframe class="preview-frame" id="preview" src="${escapeHtml(previewUrl)}"></iframe></div></div>`;
 
   function readImage(fieldId, callback){
     const input=document.getElementById(fieldId);
@@ -53,7 +55,7 @@ function renderEditor(){
       background:document.getElementById('backgroundUrl').value,
       opening:document.getElementById('opening').value
     };
-    try{localStorage.setItem('temuundang-project',JSON.stringify(project));updateOpenWebsiteLink();document.getElementById('preview').src='invitation.html?preview='+Date.now();showToast('Foto dan perubahan berhasil disimpan')}catch(e){showToast('Gagal menyimpan: gambar terlalu besar')}
+    try{localStorage.setItem('temuundang-project',JSON.stringify(project));updateOpenWebsiteLink();const nextPreviewUrl=new URL(getInvitationUrl(project));nextPreviewUrl.searchParams.set('preview',Date.now());document.getElementById('preview').src=nextPreviewUrl.href;showToast('Foto dan perubahan berhasil disimpan')}catch(e){showToast('Gagal menyimpan: gambar terlalu besar')}
   }
 }
 function getGuests(){return JSON.parse(localStorage.getItem('temuundang-guests')||'[]')}
