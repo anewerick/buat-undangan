@@ -4,20 +4,15 @@ Di menu **Editor Undangan**, pengguna dapat mengunggah atau memasukkan URL untuk
 
 Halaman utama berfungsi sebagai landing page dan katalog tema. Tombol **Dashboard** membuka area pengelolaan undangan, editor data, pratinjau template, serta daftar tamu dan tautan personal.
 
-Undangan lengkap tersedia pada `invitation.html` dan dapat dibagikan dengan parameter tamu, misalnya:
+Undangan yang dibuka atau disalin dari dashboard memakai slug nama pasangan dan membawa nama mempelai di tautan, misalnya:
 
-`invitation.html?to=Budi%20Santoso`
+`invitation.html?couple=arga-wijaya-rania-putri&groom=Arga+Wijaya&bride=Rania+Putri`
 
-# Undangan Pernikahan
+Tautan dari daftar tamu juga menyertakan nama penerima untuk mengisi RSVP otomatis.
 
-## Edit undangan
+## Pengelolaan undangan
 
-1. Buka website dan klik tombol **Edit**.
-2. Ubah nama, tanggal, venue, alamat, tautan Google Maps, dan foto utama.
-3. Klik **Simpan & Pratinjau**. Perubahan tersimpan pada browser.
-4. Untuk menjadikannya permanen, klik **Unduh config.js**, lalu ganti file `config.js` di folder proyek.
-
-Anda juga dapat mengedit langsung `config.js`.
+Gunakan **Dashboard** untuk mengubah detail dan foto undangan. Proyek tersimpan di browser yang digunakan untuk mengedit.
 
 ## Hosting gratis dengan GitHub Pages
 

@@ -12,6 +12,18 @@ if (project) {
   if (project.background) config.heroImage = project.background;
   else if (project.photo) config.heroImage = project.photo;
 }
+const invitationParams = new URLSearchParams(location.search);
+const linkedGroom = invitationParams.get("groom");
+const linkedBride = invitationParams.get("bride");
+if (linkedGroom || linkedBride) {
+  config.names = {
+    ...config.names,
+    groom: linkedGroom || config.names.groom,
+    bride: linkedBride || config.names.bride,
+    groomFull: linkedGroom || config.names.groomFull,
+    brideFull: linkedBride || config.names.brideFull
+  };
+}
 
 function applyConfig() {
   document.querySelectorAll("[data-config]").forEach((element) => {
