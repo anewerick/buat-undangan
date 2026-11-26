@@ -3,6 +3,8 @@ window.WEDDING_CONFIG = {
   dateText: "Sabtu, 20 Juni 2027",
   dateShort: "20 · 06 · 2027",
   dateISO: "2027-06-20T08:00:00+07:00",
+  akadTime: "08.00 – 10.00 WIB",
+  receptionTime: "11.00 – 14.00 WIB",
   rsvpDeadline: "10 Juni 2027",
   groomParents: "Putra pertama dari<br>Bapak Hadi Wijaya & Ibu Maya Sari",
   brideParents: "Putri kedua dari<br>Bapak Dimas Pratama & Ibu Lina Kartika",
@@ -13,8 +15,14 @@ window.WEDDING_CONFIG = {
   venue: "The Glass House",
   address: "Jl. Melati Raya No. 88, Jakarta Selatan",
   mapUrl: "https://maps.google.com",
+  opening: "Dengan penuh sukacita, kami mengundang Anda untuk merayakan hari bahagia kami.",
   heroImage: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1920&q=88",
   groomImage: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=700&q=88",
   brideImage: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=700&q=88",
   eventImage: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1600&q=85"
+};
+
+window.SUPABASE_CONFIG = {
+  url: "https://ltaoeazeiasaazrqtvjb.supabase.co",
+  anonKey: "sb_publishable_gUBhJPRmm8EAYSCtaqgcaQ_3-TCTH87"
 };

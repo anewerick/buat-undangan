@@ -39,7 +39,7 @@
           <circle cx="120" cy="18" r="3" fill="currentColor"/>
         </svg>
         <p class="bismillah">Atas berkat rahmat Allah SWT</p>
-        <p class="quote-text">“Cinta bukan tentang mencari seseorang yang sempurna, melainkan belajar melihat seseorang secara sempurna.”</p>
+        <p class="quote-text" data-config="opening">“Cinta bukan tentang mencari seseorang yang sempurna, melainkan belajar melihat seseorang secara sempurna.”</p>
         <div class="divider"><span></span></div>
       </div>
     </section>
@@ -48,7 +48,7 @@
       <div class="container">
         <div class="couple-grid">
           <article class="person reveal">
-            <div class="portrait portrait-arga"><span>ARGA</span></div>
+            <div class="portrait portrait-arga"><span data-config="groom">ARGA</span></div>
             <div class="person-copy">
               <p class="role">THE GROOM</p>
               <h2 data-config="groomFull">Arga Wijaya</h2>
@@ -60,7 +60,7 @@
           <div class="couple-mark reveal" aria-hidden="true"><span>&</span></div>
 
           <article class="person reveal">
-            <div class="portrait portrait-rania"><span>RANIA</span></div>
+            <div class="portrait portrait-rania"><span data-config="bride">RANIA</span></div>
             <div class="person-copy">
               <p class="role">THE BRIDE</p>
               <h2 data-config="brideFull">Rania Putri</h2>
@@ -89,13 +89,13 @@
           <div class="event-row">
             <div class="event-detail">
               <p class="role">AKAD</p>
-              <h3>Sabtu, 20 Juni 2027</h3>
-              <p>08.00 – 10.00 WIB</p>
+              <h3 data-config="dateText">Sabtu, 20 Juni 2027</h3>
+              <p data-config="akadTime">08.00 – 10.00 WIB</p>
             </div>
             <div class="event-detail">
               <p class="role">RESEPSI</p>
-              <h3>Sabtu, 20 Juni 2027</h3>
-              <p>11.00 – 14.00 WIB</p>
+              <h3 data-config="dateText">Sabtu, 20 Juni 2027</h3>
+              <p data-config="receptionTime">11.00 – 14.00 WIB</p>
             </div>
           </div>
           <div class="venue">
@@ -190,9 +190,11 @@
   <button class="music-control" id="music-control" aria-label="Putar musik" aria-pressed="false">
     <svg class="music-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13M9 9l11-2M6.5 21A2.5 2.5 0 1 0 6.5 16a2.5 2.5 0 0 0 0 5Zm11-2A2.5 2.5 0 1 0 17.5 14a2.5 2.5 0 0 0 0 5Z"/></svg>
   </button>
+  <audio id="background-music" loop preload="none"></audio>
 
-  <div class="toast" id="toast" role="status" aria-live="polite">Konfirmasi berhasil dikirim</div>
-  <script src="config.js?v=2"></script>
-  <script src="script.js?v=4"></script>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="config.js?v=4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js?v=6"></script>
 </body>
 </html>
