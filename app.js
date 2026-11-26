@@ -33,6 +33,9 @@ let currentUser = null;
 let invitations = [];
 let currentInvitation = null;
 let recoveryMode = false;
+let awaitingEmailConfirmation = false;
+let signupRequestPending = false;
+let signupCooldownTimer = null;
 
 function showToast(message) {
   toast.textContent = message;
@@ -213,24 +216,95 @@ document.getElementById("auth-form").addEventListener("submit", async (event) =>
 });
 
 document.getElementById("sign-up").onclick = async () => {
-  if (!supabaseClient) return;
-  const email = document.getElementById("auth-email").value.trim();
-  const password = document.getElementById("auth-password").value;
-  if (!email || password.length < 8) {
-    authMessage.textContent = "Masukkan email dan kata sandi minimal 8 karakter.";
-    return;
-  }
-  const { data, error } = await supabaseClient.auth.signUp({ email, password });
-  if (error) {
-    authMessage.textContent = `Gagal membuat akun: ${error.message}`;
-    return;
-  }
-  if (!data.session) {
-    authMessage.textContent = "Akun dibuat. Periksa email untuk konfirmasi, lalu masuk.";
-    return;
-  }
-  await openDashboard();
+  await createOrResendAccount(false);
 };
+
+document.getElementById("resend-confirmation").onclick = async () => {
+  await createOrResendAccount(true);
+};
+
+async function createOrResendAccount(resendConfirmation) {
+  if (!supabaseClient || signupRequestPending || signupCooldownTimer) return;
+  const form = document.getElementById("auth-form");
+  const emailInput = document.getElementById("auth-email");
+  const email = emailInput.value.trim();
+  if (resendConfirmation ? !emailInput.reportValidity() : !form.reportValidity()) {
+    authMessage.textContent = resendConfirmation
+      ? "Masukkan alamat email akun untuk mengirim ulang konfirmasi."
+      : "Masukkan email yang valid dan kata sandi minimal 8 karakter.";
+    return;
+  }
+
+  const password = document.getElementById("auth-password").value;
+  const signupButton = document.getElementById("sign-up");
+  const resendButton = document.getElementById("resend-confirmation");
+  const activeButton = resendConfirmation ? resendButton : signupButton;
+  signupRequestPending = true;
+  activeButton.disabled = true;
+  activeButton.textContent = "Memproses...";
+  authMessage.textContent = resendConfirmation ? "Mengirim ulang email konfirmasi..." : "Membuat akun...";
+
+  try {
+    const result = resendConfirmation
+      ? await supabaseClient.auth.resend({ type: "signup", email })
+      : await supabaseClient.auth.signUp({ email, password });
+    if (result.error) {
+      const waitMatch = result.error.message.match(/after\s+(\d+)\s+seconds?/i);
+      if (waitMatch) {
+        startSignupCooldown(Number(waitMatch[1]), resendConfirmation);
+        authMessage.textContent = `Terlalu sering meminta email. Tunggu ${waitMatch[1]} detik sebelum mencoba lagi; periksa juga kotak masuk Anda.`;
+      } else {
+        authMessage.textContent = `${resendConfirmation ? "Gagal mengirim ulang konfirmasi" : "Gagal membuat akun"}: ${result.error.message}`;
+      }
+      return;
+    }
+
+    if (resendConfirmation) {
+      authMessage.textContent = "Jika alamat email terdaftar, email konfirmasi akan dikirim. Periksa kotak masuk dan folder spam.";
+      return;
+    }
+    if (!result.data.session) {
+      awaitingEmailConfirmation = true;
+      signupButton.hidden = true;
+      resendButton.hidden = false;
+      authMessage.textContent = "Akun dibuat. Buka email konfirmasi sebelum masuk. Jika email belum masuk, gunakan tombol kirim ulang.";
+      return;
+    }
+    await openDashboard();
+  } catch (error) {
+    authMessage.textContent = `Permintaan akun gagal: ${error.message}`;
+  } finally {
+    signupRequestPending = false;
+    if (!signupCooldownTimer) {
+      activeButton.disabled = false;
+      activeButton.textContent = resendConfirmation ? "Kirim ulang konfirmasi" : "Buat Akun";
+    }
+  }
+}
+
+function startSignupCooldown(seconds, resendConfirmation) {
+  if (signupCooldownTimer) clearInterval(signupCooldownTimer);
+  let remaining = Math.max(1, seconds);
+  const signupButton = document.getElementById("sign-up");
+  const resendButton = document.getElementById("resend-confirmation");
+  const activeButton = resendConfirmation ? resendButton : signupButton;
+  signupButton.disabled = true;
+  resendButton.disabled = true;
+  activeButton.textContent = `Coba lagi dalam ${remaining} dtk`;
+  signupCooldownTimer = setInterval(() => {
+    remaining -= 1;
+    if (remaining <= 0) {
+      clearInterval(signupCooldownTimer);
+      signupCooldownTimer = null;
+      signupButton.disabled = false;
+      resendButton.disabled = false;
+      activeButton.textContent = resendConfirmation ? "Kirim ulang konfirmasi" : "Buat Akun";
+      authMessage.textContent = "Anda bisa mencoba kembali. Periksa email terlebih dahulu jika sudah sempat mendaftar.";
+      return;
+    }
+    activeButton.textContent = `Coba lagi dalam ${remaining} dtk`;
+  }, 1000);
+}
 
 document.getElementById("reset-password").onclick = async () => {
   if (!supabaseClient) return;
